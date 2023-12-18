@@ -52,7 +52,7 @@ def save(audio: bytes, filename: str) -> None:
         f.write(audio)
 
 
-def stream(audio_stream: Iterator[bytes]) -> bytes:
+async def stream(audio_stream: Iterator[bytes]) -> bytes:
     if not is_installed("mpv"):
         message = (
             "mpv not found, necessary to stream audio. "
@@ -71,7 +71,7 @@ def stream(audio_stream: Iterator[bytes]) -> bytes:
 
     audio = b""
 
-    for chunk in audio_stream:
+    async for chunk in audio_stream:
         if chunk is not None:
             mpv_process.stdin.write(chunk)  # type: ignore
             mpv_process.stdin.flush()  # type: ignore
